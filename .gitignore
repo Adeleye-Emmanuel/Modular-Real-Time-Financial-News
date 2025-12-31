@@ -1,0 +1,28 @@
+# Environment & API keys
+.env
+*.env
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+*.env.bak
+
+# OS / IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Data files
+data/
+.data/
+*.parquet
+*.tsv
+*.csv
