@@ -1,0 +1,3 @@
+max_rss_articles=5
+max_google_news_articles=5
+max_reddit_posts=5

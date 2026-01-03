@@ -2,6 +2,9 @@ import re
 import numpy as np
 import pandas as pd
 from src.scraper import Scraper
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger()
 
 def clean_corpus(text):
 
