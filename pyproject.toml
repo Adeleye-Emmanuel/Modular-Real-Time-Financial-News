@@ -1,0 +1,9 @@
+[project]
+name = "financial_news"
+version = "0.1.0"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
