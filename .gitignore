@@ -26,3 +26,6 @@ data/
 *.parquet
 *.tsv
 *.csv
+
+# build artifacts
+financial_news.egg-info/
