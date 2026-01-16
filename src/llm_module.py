@@ -58,7 +58,14 @@ def analyze_text(s_query, relevant_text):
     # initiate llm model
     prompt = ChatPromptTemplate.from_template(
     """
-    Analyze the following news corpus regarding {query} and extract:
+    Analyze the following news corpus regarding {query} 
+    ### RULES:
+        1. ONLY use the provided Corpus to answer. 
+        2. If the Corpus does not contain information for a specific field, return "N/A" for that field. 
+        3. DO NOT use your internal training data to invent risks or drivers.
+        4. For 'sentiment', ensure the percentage is derived directly from context or tone indicators in the text.
+    
+    and extract:
     {format_instructions}
     
     Corpus:
@@ -84,8 +91,8 @@ def analyze_text(s_query, relevant_text):
 def create_search_index(full_text):
     # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200
+        chunk_size=600,
+        chunk_overlap=120
     )
     chunks = text_splitter.split_text(full_text)
 
@@ -93,7 +100,7 @@ def create_search_index(full_text):
     embeddings = OpenAIEmbeddings(openai_api_key=openai_api)
     return FAISS.from_texts(chunks, embeddings)    
 
-def analyze_with_semantic_search(s_query, text_list, n_results=10):
+def analyze_with_semantic_search(s_query, text_list, n_results=8):
     full_texts = " ".join(text_list) if isinstance(text_list, list) else text_list
     # creating vector index on full corpus
     index = create_search_index(full_texts)
@@ -103,9 +110,10 @@ def analyze_with_semantic_search(s_query, text_list, n_results=10):
     faiss_retriever = index.as_retriever()
     ensemble_retriever = EnsembleRetriever(
         retrievers=[bm25_retriever, faiss_retriever], 
-        weights=[0.4,0.6]
+        weights=[0.5,0.5]
     )
     
     relevant_text = ensemble_retriever.get_relevant_documents(s_query)
+    relevant_text = relevant_text[:n_results] if len(relevant_text)>n_results else relevant_text
     
     return analyze_text(s_query, relevant_text), relevant_text

@@ -430,22 +430,22 @@ class FinancialInsightEvaluator:
         
         # LLM-as-Judge evaluation
         judge_prompt = f"""
-Evaluate how relevant this financial analysis is to the query.
+                        Evaluate how relevant this financial analysis is to the query.
 
-Query: "{query}"
+                        Query: "{query}"
 
-Analysis Output:
-{json.dumps(output, indent=2)}
+                        Analysis Output:
+                        {json.dumps(output, indent=2)}
 
-Rate the relevance from 1-5:
-1 = Completely irrelevant, discusses unrelated topics
-2 = Mostly irrelevant, only tangentially related
-3 = Partially relevant, addresses some aspects of the query
-4 = Mostly relevant, covers main aspects with minor gaps
-5 = Highly relevant, directly and comprehensively addresses the query
+                        Rate the relevance from 1-5:
+                        1 = Completely irrelevant, discusses unrelated topics
+                        2 = Mostly irrelevant, only tangentially related
+                        3 = Partially relevant, addresses some aspects of the query
+                        4 = Mostly relevant, covers main aspects with minor gaps
+                        5 = Highly relevant, directly and comprehensively addresses the query
 
-Provide your rating as "Score: X" followed by a brief explanation.
-"""
+                        Provide your rating as "Score: X" followed by a brief explanation.
+                        """
         
         response = self._llm_judge(judge_prompt)
         raw_score = self._parse_score(response)
@@ -732,19 +732,19 @@ Provide your rating as "Score: X" followed by a brief explanation.
         
         # Use LLM to independently assess sentiment
         judge_prompt = f"""
-Analyze the sentiment of this financial analysis based on the content, ignoring any stated sentiment labels.
+                        Analyze the sentiment of this financial analysis based on the content, ignoring any stated sentiment labels.
 
-Key Insights: {insights}
-Risks: {risks}
+                        Key Insights: {insights}
+                        Risks: {risks}
 
-Based purely on the content:
-1. What sentiment does this convey? (positive/negative/neutral)
-2. How confident are you? (0-100%)
+                        Based purely on the content:
+                        1. What sentiment does this convey? (positive/negative/neutral)
+                        2. How confident are you? (0-100%)
 
-Respond in format:
-Sentiment: [positive/negative/neutral]
-Confidence: [X]%
-"""
+                        Respond in format:
+                        Sentiment: [positive/negative/neutral]
+                        Confidence: [X]%
+                        """
         
         response = self._llm_judge(judge_prompt)
         
