@@ -61,7 +61,7 @@ def analyze_text(s_query, relevant_text):
     Analyze the following news corpus regarding {query} 
     ### RULES:
         1. ONLY use the provided Corpus to answer. 
-        2. If the Corpus does not contain information for a specific field, return "N/A" for that field. 
+        2. If the Corpus does not contain information for a specific field, return "Not specified in corpus" for that field. 
         3. DO NOT use your internal training data to invent risks or drivers.
         4. For 'sentiment', ensure the percentage is derived directly from context or tone indicators in the text.
     
@@ -71,6 +71,7 @@ def analyze_text(s_query, relevant_text):
     Corpus:
     {text}
     
+    After generating the analysed results, loop back again to verify all instructions and rules are followed and if not adjust to comply.
     """)
     #client = openai.OpenAI(api_key=openai_key)
     llm = ChatOpenAI(

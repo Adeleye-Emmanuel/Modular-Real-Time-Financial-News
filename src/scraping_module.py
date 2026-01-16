@@ -13,7 +13,7 @@ from newspaper import Article, Config
 import requests
 from bs4 import BeautifulSoup
 import sys
-from src.utils import clean_corpus, refine_corpus, news_pull
+from src.utils import clean_corpus, refine_corpus
 from src.config import config
 from urllib.parse import quote_plus
 from datetime import datetime, timedelta
@@ -72,6 +72,7 @@ class NewsAPIScraper(BaseScraper):
                 for a in articles
             ]
             df = pd.DataFrame(parsed_articles)
+            print(df)
             df['content'] = df['content'].apply(self._clean_results_napi)
             return df
         except requests.exceptions.RequestException as e:
@@ -230,39 +231,84 @@ class RSSFeedScraper(BaseScraper):
         'yahoo_finance': 'https://finance.yahoo.com/news/rssindex',
         'investing_com': 'https://www.investing.com/rss/news.rss',
     }
+    # def _fetch_rss_feed(self, feed_url, num_articles):
+    #     feed = feedparser.parse(feed_url)    
+
+    #     articles = []
+
+    #     for entry in feed.entries:
+    #         # Safely get title and content (summary/description)
+    #         title = entry.get('title', '')
+    #         summary = entry.get('summary', entry.get('description', ''))
+
+    #         # Checking if the query matches the title or summary
+    #         if self.query and self.query.lower() not in (title + summary).lower():
+    #             continue # this skips non-matching articles
+                
+    #         # Parse the publication date
+    #         pub_date = datetime(*entry.published_parsed[:6]) if hasattr(entry, "published_parsed") else None
+
+    #         articles.append({
+    #             "title": entry.title,
+    #             "content": entry.summary,
+    #             "source": feed_url,
+    #             "date": pub_date,
+    #             "url": entry.link
+    #         })
+            
+    #     # sort articles by date, most recent first
+    #     articles = sorted(articles, key=lambda x: x['date'] or datetime.min, reverse=True)
+    #     if num_articles < len(articles):
+    #         articles = articles[:num_articles]
+    #     else:
+    #         articles = articles
+    #     return articles
     def _fetch_rss_feed(self, feed_url, num_articles):
         feed = feedparser.parse(feed_url)    
-
         articles = []
 
+        # 1. PRE-PROCESS QUERY: Break into keywords
+        # Ignore common "stop words" and words shorter than 3 chars to prevent false positives
+        stop_words = {'and', 'the', 'for', 'with', 'from', 'news', 'stock', 'market'}
+        if self.query:
+            query_keywords = [
+                word.lower() for word in self.query.split() 
+                if len(word) > 2 and word.lower() not in stop_words
+            ]
+        else:
+            query_keywords = []
+            
+        query_keywords.append(self.query)
         for entry in feed.entries:
-            
-            # Safely get title and content (summary/description)
-            title = entry.get('title', '')
-            summary = entry.get('summary', entry.get('description', ''))
+            title = entry.get('title', '').lower()
+            summary = entry.get('summary', entry.get('description', '')).lower()
+            content_pool = f"{title} {summary}"
 
-            # Checking if the query matches the title or summary
-            if self.query and self.query.lower() not in (title + summary).lower():
-                continue # this skips non-matching articles
+            # 2. REFINED FILTERING: Keyword-based "AND" logic
+            if query_keywords:
+                # Check if EVERY keyword exists somewhere in the title or summary
+                if not all(kw in content_pool for kw in query_keywords):
+                    continue
             
-            # Parse the publication date
-            pub_date = datetime(*entry.published_parsed[:6]) if hasattr(entry, "published_parsed") else None
+            # Parse the publication date safely
+            pub_date = datetime(*entry.published_parsed[:6]) if hasattr(entry, "published_parsed") else datetime.now()
 
             articles.append({
-                "title": entry.title,
-                "content": entry.summary,
+                "title": entry.get('title', 'No Title'),
+                "content": entry.get('summary', 'No Content'),
                 "source": feed_url,
                 "date": pub_date,
-                "url": entry.link
+                "url": entry.get('link', '')
             })
         
-        # sort articles by date, most recent first
-        articles = sorted(articles, key=lambda x: x['date'] or datetime.min, reverse=True)
+        # Sort and limit
+        articles = sorted(articles, key=lambda x: x['date'], reverse=True)
         if num_articles < len(articles):
             articles = articles[:num_articles]
         else:
-            articles = articles
+             articles = articles
         return articles
+        
     def fetch_data(self, max_articles_per_feed=50):
         all_articles = []
         for name, url in self.feed_urls.items():
@@ -467,7 +513,6 @@ class UnifiedFinancialScraper:
         combined_data = pd.concat(all_data, ignore_index=True)
         logger.info(f"Total articles before deduplication: {len(combined_data)}")
         df = self._score_quality(combined_data)
-        print(df[['title', 'source', 'quality_score']].head(10))
         df = self._deduplicate(df)
         logger.info(f"Total articles after deduplication: {len(df)}")
         print(df["source"].value_counts())
@@ -475,7 +520,7 @@ class UnifiedFinancialScraper:
 
 if __name__ == "__main__":
 
-    scraper = UnifiedFinancialScraper(query="stock market")
+    scraper = UnifiedFinancialScraper(query="Banking sector earnings")
     result_df = scraper.fetch_all(include_social=True)
     print(f"\nFetched {len(result_df)} articles")
     print(result_df[['title', 'source', 'quality_score']].head(10))

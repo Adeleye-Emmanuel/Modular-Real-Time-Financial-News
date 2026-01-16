@@ -1,7 +1,6 @@
 import re
 import numpy as np
 import pandas as pd
-from src.scraper import Scraper
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
@@ -67,45 +66,3 @@ def refine_corpus(corpus, min_length=70):
             cleaned_sentences.append(clean_sent)    
     
     return  cleaned_sentences
-
-def news_pull(s_query, s_type, include_media, media_percent=None):
-    scraper = Scraper(s_query)
-    if include_media==True:
-        if isinstance(media_percent, float):
-            if s_type == 'general': # specifying general drops ticker based search from alphaadvantage
-                napi_df = scraper.fetch_newsapi(s_query, 100, "full")
-                aapi_df = None
-                reddit_df = scraper.fetch_reddit(query=s_query, percent=media_percent)
-                rss_df = scraper.fetch_multiple_rss(query=s_query)
-            
-            elif s_type == 'ticker': # specifying ticker includes alphaadvantage ticker based news
-                napi_df = scraper.fetch_newsapi(s_query, 100, "full")
-                aapi_df = scraper.fetch_alpha_vantage(s_query)
-                reddit_df = scraper.fetch_reddit(query=s_query, percent=0.3)
-                rss_df = scraper.fetch_multiple_rss(query=s_query)
-
-        else:
-            print('Enter a valid percentage value for media articles')
-    
-    elif include_media==False:
-        if s_type == 'general':
-            napi_df = scraper.fetch_newsapi(s_query, 100, "full")
-            aapi_df = None
-            reddit_df = None
-            rss_df = scraper.fetch_multiple_rss(query=s_query)
-        
-        elif s_type == 'ticker':
-            napi_df = scraper.fetch_newsapi(s_query, 100, "full")
-            aapi_df = scraper.fetch_alpha_vantage(s_query)
-            reddit_df = None
-            rss_df = scraper.fetch_multiple_rss(query=s_query)  
-    
-    dfs = [df for df in [napi_df, aapi_df, reddit_df, rss_df] if df is not None]
-    full_response = pd.concat(dfs, axis=0).reset_index(drop=True)
-    full_response['full_response'] = " Source: " + full_response['source'] + "\n" + full_response['title'] + '\n' + full_response['content']
-    
-    texts_list = full_response['title'] + '\n' + full_response['content']
-
-    # Stack them all into a single string
-    all_text = "\n".join(texts_list)                             
-    return full_response, all_text
