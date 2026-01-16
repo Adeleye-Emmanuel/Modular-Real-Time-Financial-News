@@ -1,0 +1,135 @@
+{
+  "query": "stock market outlook",
+  "timestamp": "2026-01-16T00:58:05.996823",
+  "aggregate_score": 0.5769503493856175,
+  "faithfulness": {
+    "score": 0.36363636363636365,
+    "supported_claims": 4,
+    "total_claims": 11,
+    "claim_details": [
+      {
+        "claim": "Global economy expected to grow by",
+        "supported": true,
+        "max_similarity": 0.6386922597885132,
+        "best_evidence": "The IMF projects global economic growth of 3.2% for 2024 despite ongoing trade tensions."
+      },
+      {
+        "claim": "2% despite US trade war",
+        "supported": false,
+        "max_similarity": 0.4512714743614197,
+        "best_evidence": "The IMF projects global economic growth of 3.2% for 2024 despite ongoing trade tensions."
+      },
+      {
+        "claim": "Small businesses are leading indicators of labor market trends",
+        "supported": true,
+        "max_similarity": 0.689362645149231,
+        "best_evidence": "Small business hiring has slowed, often a leading indicator for broader employment trends."
+      },
+      {
+        "claim": "Potential rise in USAR due to geopolitical tensions",
+        "supported": false,
+        "max_similarity": 0.32272422313690186,
+        "best_evidence": "The IMF projects global economic growth of 3.2% for 2024 despite ongoing trade tensions."
+      },
+      {
+        "claim": "Speculation on crashing gold prices to reinforce dollar safety",
+        "supported": true,
+        "max_similarity": 0.6244193911552429,
+        "best_evidence": "Gold prices have shown volatility amid speculation about dollar strength."
+      },
+      {
+        "claim": "Grid capacity shortages being addressed with diesel and gas generators",
+        "supported": true,
+        "max_similarity": 0.6855370998382568,
+        "best_evidence": "Energy grid operators are deploying backup diesel generators to address capacity constraints."
+      },
+      {
+        "claim": "Tariffs imposed by Trump on countries doing business with Iran",
+        "supported": false,
+        "max_similarity": 0.4693894386291504,
+        "best_evidence": "Trade tariffs continue to impact China's manufacturing sector significantly."
+      },
+      {
+        "claim": "renewable energy grid upgrades",
+        "supported": false,
+        "max_similarity": 0.41811537742614746,
+        "best_evidence": "Energy grid operators are deploying backup diesel generators to address capacity constraints."
+      },
+      {
+        "claim": "China's rental of Venezuelan resources",
+        "supported": false,
+        "max_similarity": 0.27795594930648804,
+        "best_evidence": "The IMF projects global economic growth of 3.2% for 2024 despite ongoing trade tensions."
+      },
+      {
+        "claim": "potential digital currency backed by tangible assets",
+        "supported": false,
+        "max_similarity": 0.20399460196495056,
+        "best_evidence": "The IMF projects global economic growth of 3.2% for 2024 despite ongoing trade tensions."
+      },
+      {
+        "claim": "Potential reduction in employment at mid to large private sector firms, impact on China's economy from US actions, volatility in gold and oil prices due to geopolitical tensions",
+        "supported": false,
+        "max_similarity": 0.46016642451286316,
+        "best_evidence": "Trade tariffs continue to impact China's manufacturing sector significantly."
+      }
+    ]
+  },
+  "relevance": {
+    "score": 0.75,
+    "raw_score": 4.0,
+    "semantic_similarity": 0.3528220057487488,
+    "explanation": "The analysis output provides a comprehensive overview of various factors influencing the stock market outlook, including economic growth projections, labor market trends, geopolitical tensions, and potential risks. While it does not explicitly focus on stock market predictions or specific stock performance, it covers key drivers and risks that are highly relevant to understanding the broader market environment. The sentiment analysis also adds context to the outlook. However, it could be improved by directly addressing stock market trends or indices. Overall, it is mostly relevant with minor gaps."
+  },
+  "coherence": {
+    "score": 0.590092134475708,
+    "raw_score": 4.0,
+    "internal_consistency": 0.35023033618927,
+    "logical_flow": 0.75,
+    "explanation": "The analysis presents a generally coherent narrative regarding the current state of the global economy, key drivers, and associated risks. The insights about economic growth, small businesses as labor market indicators, and geopolitical tensions are logically connected and reflect a comprehensive understanding of the current financial landscape. The mention of potential risks, such as employment reductions and volatility in commodity prices, aligns well with the insights provided.\n\nHowever, there are minor inconsistencies, particularly in the way the potential rise in the US dollar (USAR) is framed alongside speculation about crashing gold prices. While both points can coexist, the connection between them could be more explicitly articulated to enhance clarity. Additionally, the sentiment analysis, while neutral, could benefit from a clearer linkage to the specific insights and risks mentioned, as it feels somewhat generalized.\n\nOverall, the analysis flows logically and presents a mostly consistent story, with only minor issues that prevent it from achieving a perfect score."
+  },
+  "coverage": {
+    "score": 0.6103841245174408,
+    "entity_coverage": 0.6207682490348816,
+    "topic_coverage": 0.6,
+    "key_terms_captured": [
+      "trade",
+      "diesel",
+      "dollar",
+      "economic",
+      "economic growth",
+      "employment",
+      "energy",
+      "energy grid",
+      "generators",
+      "global",
+      "gold",
+      "gold prices"
+    ],
+    "missed_terms": [
+      "volatility amid",
+      "employment trends",
+      "despite ongoing",
+      "diesel generators",
+      "dollar strength",
+      "deploying backup",
+      "generators address",
+      "global economic"
+    ]
+  },
+  "specificity": {
+    "score": 0.9712230215827338,
+    "named_entities_count": 16,
+    "numeric_claims_count": 9,
+    "vague_phrases_count": 4,
+    "specificity_ratio": 0.8333333333333334
+  },
+  "sentiment_calibration": {
+    "score": 0.30000000000000004,
+    "stated_sentiment": "positive",
+    "stated_confidence": 0.5,
+    "detected_sentiment": "neutral",
+    "detected_confidence": 0.75,
+    "calibration_error": 0.25
+  }
+}
